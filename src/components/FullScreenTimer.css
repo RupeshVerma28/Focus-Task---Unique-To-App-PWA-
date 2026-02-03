@@ -1,0 +1,286 @@
+.fullscreen-timer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #0a0e17 0%, #131720 50%, #0a0e17 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.fullscreen-timer-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+    padding: var(--spacing-xl);
+}
+
+.fullscreen-timer-header {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+}
+
+.fullscreen-timer-task-title {
+    flex: 1;
+    font-size: var(--font-size-2xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.fullscreen-timer-close {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.fullscreen-timer-close:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+    border-color: var(--color-accent-primary);
+}
+
+.fullscreen-timer-display-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+    margin: var(--spacing-xl) 0;
+}
+
+.fullscreen-timer-display {
+    font-size: 6rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-accent-light);
+    text-align: center;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+    letter-spacing: -0.02em;
+}
+
+.fullscreen-timer-description {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    text-align: center;
+    max-width: 500px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.fullscreen-timer-controls {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.fullscreen-timer-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    font-size: var(--font-size-base);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    min-width: 120px;
+}
+
+.fullscreen-timer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.fullscreen-timer-btn:active {
+    transform: translateY(0);
+}
+
+.btn-play {
+    background: var(--color-accent-primary);
+    color: white;
+    border-color: var(--color-accent-primary);
+}
+
+.btn-play:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+}
+
+.btn-pause {
+    background: var(--color-warning);
+    color: white;
+    border-color: var(--color-warning);
+}
+
+.btn-pause:hover {
+    background: #d97706;
+    border-color: #d97706;
+}
+
+.btn-stop {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-light);
+}
+
+.btn-stop:hover {
+    background: var(--color-danger);
+    color: white;
+    border-color: var(--color-danger);
+}
+
+.btn-complete {
+    background: var(--color-success);
+    color: white;
+    border-color: var(--color-success);
+}
+
+.btn-complete:hover {
+    background: var(--color-success-hover);
+    border-color: var(--color-success-hover);
+}
+
+.fullscreen-timer-add-section {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.fullscreen-timer-add-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.fullscreen-timer-add-toggle:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+    border-color: var(--color-accent-primary);
+}
+
+.fullscreen-timer-add-input-wrapper {
+    overflow: hidden;
+}
+
+.fullscreen-timer-add-input {
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-lg);
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-accent-primary);
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    outline: none;
+}
+
+.fullscreen-timer-add-input::placeholder {
+    color: var(--color-text-disabled);
+    font-style: italic;
+}
+
+.fullscreen-timer-add-input:focus {
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.fullscreen-timer-hint {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin: var(--spacing-lg) 0 0 0;
+    font-style: italic;
+}
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+    .fullscreen-timer-display {
+        font-size: 4rem;
+    }
+
+    .fullscreen-timer-task-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .fullscreen-timer-close {
+        width: 40px;
+        height: 40px;
+    }
+
+    .fullscreen-timer-close svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .fullscreen-timer-controls {
+        width: 100%;
+    }
+
+    .fullscreen-timer-btn {
+        flex: 1;
+        min-width: auto;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .fullscreen-timer-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .fullscreen-timer-btn span {
+        font-size: var(--font-size-sm);
+    }
+}
+
+@media (max-width: 400px) {
+    .fullscreen-timer-display {
+        font-size: 3rem;
+    }
+
+    .fullscreen-timer-controls {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .fullscreen-timer-btn {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+    }
+}
