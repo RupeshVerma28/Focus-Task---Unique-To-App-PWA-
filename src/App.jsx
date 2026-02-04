@@ -327,6 +327,26 @@ function App() {
               </AnimatePresence>
             </div>
 
+            {/* Completed Tasks Section */}
+            {tasks.some(t => t.completed) && (
+              <div className="completed-section">
+                <h3 className="section-title">Completed</h3>
+                <div className="tasks-list completed-list">
+                  {tasks.filter(t => t.completed).map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      onUpdate={handleUpdateTask}
+                      onDelete={handleDeleteTask}
+                      onToggleComplete={handleToggleComplete}
+                      onOpenTimer={handleOpenTimer}
+                      onPin={handlePinTask}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* FAB */}
             <motion.div
               className="fab-container"

@@ -25,7 +25,8 @@
 .brand-icon {
     width: 36px;
     height: 36px;
-    background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-light));
+    background: transparent;
+    border: 2px solid white;
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -33,7 +34,7 @@
     font-size: var(--font-size-xl);
     font-weight: bold;
     color: white;
-    box-shadow: var(--shadow-md);
+    box-shadow: none;
 }
 
 .brand-title {
