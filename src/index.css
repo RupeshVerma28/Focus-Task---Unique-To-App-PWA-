@@ -160,8 +160,10 @@ button:disabled {
 
 .btn-primary {
   background: var(--color-accent-primary);
-  color: white;
+  color: var(--color-bg-primary);
+  /* Black text on white background */
   box-shadow: var(--shadow-sm);
+  font-weight: 600;
 }
 
 .btn-primary:hover:not(:disabled) {
