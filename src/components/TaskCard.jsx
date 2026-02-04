@@ -2,19 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Trash2, Edit2, MoreVertical, Pin, Play, Timer, X, Save } from 'lucide-react';
 // ...
-{/* Timer Button */ }
-{
-    !task.completed && (
-        <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => onOpenTimer(task.id)}
-            className={`timer-circle-btn ${task.isTimerRunning ? 'running' : ''}`}
-            title={task.isTimerRunning ? "View Timer" : "Start Timer"}
-        >
-            <Timer size={20} />
-        </motion.button>
-    )
-}
+
 import { formatTime } from '../utils/timeUtils';
 import './TaskCard.css';
 
@@ -123,7 +111,7 @@ const TaskCard = ({ task, onUpdate, onDelete, onToggleComplete, onOpenTimer, onP
                         className={`timer-circle-btn ${task.isTimerRunning ? 'running' : ''}`}
                         title={task.isTimerRunning ? "View Timer" : "Start Timer"}
                     >
-                        <ChevronRight size={20} />
+                        <Timer size={20} />
                     </motion.button>
                 )}
 
