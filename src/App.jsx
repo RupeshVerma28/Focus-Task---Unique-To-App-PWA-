@@ -269,8 +269,9 @@ function App() {
   const handleClearHistory = async () => {
     if (window.confirm('Are you sure you want to clear all history? This cannot be undone.')) {
       await clearHistory();
-      await loadHistory();
-      await loadStats(); // Reset today's stats view if necessary, though clearHistory mostly affects 'dailyStats' store
+      setHistory([]); // Immediate state update
+      await loadHistory(); // Verify from DB
+      await loadStats(); // Reset today's stats view if necessary
     }
   };
 
@@ -299,7 +300,10 @@ function App() {
         return (
           <div className="tasks-view">
             {/* Task List */}
-            <div className="tasks-list">
+            <motion.div
+              className="tasks-list"
+              layout
+            >
               <AnimatePresence mode="popLayout">
                 {activeTasks.length === 0 ? (
                   <motion.div
@@ -325,97 +329,99 @@ function App() {
                   ))
                 )}
               </AnimatePresence>
-            </div>
-
-            {/* Completed Tasks Section */}
-            {tasks.some(t => t.completed) && (
-              <div className="completed-section">
-                <h3 className="section-title">Completed</h3>
-                <div className="tasks-list completed-list">
-                  {tasks.filter(t => t.completed).map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      onUpdate={handleUpdateTask}
-                      onDelete={handleDeleteTask}
-                      onToggleComplete={handleToggleComplete}
-                      onOpenTimer={handleOpenTimer}
-                      onPin={handlePinTask}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* FAB */}
-            <motion.div
-              className="fab-container"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <button className="fab-btn" onClick={() => setIsAddTaskModalOpen(true)}>
-                <Plus size={28} />
-              </button>
-            </motion.div>
           </div>
+
+            {/* Completed Tasks Section */ }
+        {
+          tasks.some(t => t.completed) && (
+            <div className="completed-section">
+              <h3 className="section-title">Completed</h3>
+              <div className="tasks-list completed-list">
+                {tasks.filter(t => t.completed).map((task) => (
+                  <TaskCard
+                    key={task.id}
+                    task={task}
+                    onUpdate={handleUpdateTask}
+                    onDelete={handleDeleteTask}
+                    onToggleComplete={handleToggleComplete}
+                    onOpenTimer={handleOpenTimer}
+                    onPin={handlePinTask}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        }
+
+        {/* FAB */ }
+        <motion.div
+          className="fab-container"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <button className="fab-btn" onClick={() => setIsAddTaskModalOpen(true)}>
+            <Plus size={28} />
+          </button>
+        </motion.div>
+          </div >
         );
-    }
+}
   };
 
-  return (
-    <>
-      <Navbar
-        onMenuToggle={() => setIsDrawerOpen(!isDrawerOpen)}
-        isMenuOpen={isDrawerOpen}
-      />
+return (
+  <>
+    <Navbar
+      onMenuToggle={() => setIsDrawerOpen(!isDrawerOpen)}
+      isMenuOpen={isDrawerOpen}
+    />
 
-      <Drawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        currentView={currentView}
-        onNavigate={(view) => setCurrentView(view)}
-      />
+    <Drawer
+      isOpen={isDrawerOpen}
+      onClose={() => setIsDrawerOpen(false)}
+      currentView={currentView}
+      onNavigate={(view) => setCurrentView(view)}
+    />
 
-      <main className="main-content">
-        <div className="container">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentView}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
-            >
-              {renderView()}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </main>
+    <main className="main-content">
+      <div className="container">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentView}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+          >
+            {renderView()}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </main>
 
-      {/* Modals & Overlays */}
-      <AddTaskModal
-        isOpen={isAddTaskModalOpen}
-        onClose={() => setIsAddTaskModalOpen(false)}
-        onSave={handleAddTask}
-      />
+    {/* Modals & Overlays */}
+    <AddTaskModal
+      isOpen={isAddTaskModalOpen}
+      onClose={() => setIsAddTaskModalOpen(false)}
+      onSave={handleAddTask}
+    />
 
-      <AnimatePresence>
-        {showFullScreenTimer && activeTimerTask && (
-          <FullScreenTimer
-            task={activeTimerTask}
-            onPause={handleTimerPause}
-            onResume={handleTimerResume}
-            onStop={handleTimerStop}
-            onComplete={handleCompleteFromTimer}
-            onClose={handleCloseTimer}
-            onAddTask={handleQuickAddTask}
-          />
-        )}
-      </AnimatePresence>
-    </>
-  );
+    <AnimatePresence>
+      {showFullScreenTimer && activeTimerTask && (
+        <FullScreenTimer
+          task={activeTimerTask}
+          onPause={handleTimerPause}
+          onResume={handleTimerResume}
+          onStop={handleTimerStop}
+          onComplete={handleCompleteFromTimer}
+          onClose={handleCloseTimer}
+          onAddTask={handleQuickAddTask}
+        />
+      )}
+    </AnimatePresence>
+  </>
+);
 }
 
 export default App;

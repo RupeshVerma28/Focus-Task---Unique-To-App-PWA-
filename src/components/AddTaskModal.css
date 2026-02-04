@@ -16,11 +16,18 @@
     background: var(--color-bg-card);
     width: 100%;
     max-width: 500px;
+    /* Constrain width on tablets/desktop */
     border-top-left-radius: var(--radius-xl);
     border-top-right-radius: var(--radius-xl);
     padding: var(--spacing-xl);
+    padding-bottom: max(var(--spacing-xl), env(safe-area-inset-bottom));
+    /* Handle notch/safe area on mobile */
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
     border-top: 1px solid var(--color-border);
+    max-height: 90vh;
+    /* Prevent it from being too tall on small screens */
+    overflow-y: auto;
+    /* Allow scrolling if content is too long */
 }
 
 @media (min-width: 640px) {

@@ -1,5 +1,7 @@
 :root {
   /* Color Palette - Deep Dark / Black Theme */
+  color-scheme: dark;
+  /* Forces native browser controls (time picker, scrollbars) to dark mode */
   --color-bg-primary: #000000;
   --color-bg-secondary: #121212;
   --color-bg-tertiary: #1E1E1E;
