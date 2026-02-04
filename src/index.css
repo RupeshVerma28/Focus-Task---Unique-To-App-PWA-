@@ -90,6 +90,9 @@ body {
   background-color: var(--color-bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent pull-to-refresh on Android */
+  overscroll-behavior-y: none;
+  touch-action: pan-x pan-y;
 }
 
 #root {

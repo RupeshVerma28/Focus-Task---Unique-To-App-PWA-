@@ -1,27 +1,21 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, Clock, Bell } from 'lucide-react';
+import { X } from 'lucide-react';
 import './AddTaskModal.css';
 
 const AddTaskModal = ({ isOpen, onClose, onSave }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (title.trim()) {
-            const dueDate = date && time ? new Date(`${date}T${time}`) : null;
             onSave({
                 title: title.trim(),
                 description: description.trim(),
-                dueDate: dueDate ? dueDate.toISOString() : null
             });
             setTitle('');
             setDescription('');
-            setDate('');
-            setTime('');
             onClose();
         }
     };
@@ -64,32 +58,6 @@ const AddTaskModal = ({ isOpen, onClose, onSave }) => {
                                     className="modal-textarea"
                                     rows={3}
                                 />
-                            </div>
-
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <label><Calendar size={14} /> Date</label>
-                                    <input
-                                        type="date"
-                                        value={date}
-                                        onChange={(e) => setDate(e.target.value)}
-                                        className="modal-input"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label><Clock size={14} /> Time</label>
-                                    <input
-                                        type="time"
-                                        value={time}
-                                        onChange={(e) => setTime(e.target.value)}
-                                        className="modal-input"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-note">
-                                <Bell size={14} />
-                                <span>We'll send you a notification at the set time.</span>
                             </div>
 
                             <button type="submit" className="btn btn-primary submit-btn">
