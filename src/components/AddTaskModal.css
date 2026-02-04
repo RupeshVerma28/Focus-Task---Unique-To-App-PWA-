@@ -80,14 +80,11 @@
     border-radius: var(--radius-md);
     padding: 12px;
     color: var(--color-text-primary);
-    color: var(--color-text-primary);
     font-size: 1rem;
-    color: var(--color-text-primary);
-    font-size: 1rem;
-    color-scheme: dark;
-    /* Ensures native date/time pickers are dark-themed */
-    accent-color: var(--color-accent-primary);
-    /* Sets color of native controls like 'Set' button */
+    color-scheme: light;
+    /* Force light mode for the picker popup to ensure visibility */
+    accent-color: #000000;
+    /* Dark accent for the light-themed picker */
 }
 
 /* Ensure calendar icon is white */
