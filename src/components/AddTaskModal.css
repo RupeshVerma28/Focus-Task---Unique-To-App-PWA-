@@ -82,8 +82,12 @@
     color: var(--color-text-primary);
     color: var(--color-text-primary);
     font-size: 1rem;
+    color: var(--color-text-primary);
+    font-size: 1rem;
     color-scheme: dark;
     /* Ensures native date/time pickers are dark-themed */
+    accent-color: var(--color-accent-primary);
+    /* Sets color of native controls like 'Set' button */
 }
 
 /* Ensure calendar icon is white */
