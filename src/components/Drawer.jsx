@@ -68,7 +68,7 @@ const Drawer = ({ isOpen, onClose, currentView, onNavigate }) => {
                         </nav>
 
                         <div className="drawer-footer">
-                            <p className="text-muted">Focus Tasks v1.0</p>
+                            <p className="text-muted">Planixa v1.0</p>
                             <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>
                                 Offline PWA
                             </p>

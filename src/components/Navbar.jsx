@@ -13,7 +13,7 @@ const Navbar = ({ onMenuToggle, isMenuOpen }) => {
                         animate={{ opacity: 1, x: 0 }}
                     >
                         <div className="brand-icon">✓</div>
-                        <h1 className="brand-title">Focus Tasks</h1>
+                        <h1 className="brand-title">Planixa</h1>
                     </motion.div>
 
                     <motion.button

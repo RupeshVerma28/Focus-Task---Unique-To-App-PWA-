@@ -70,9 +70,10 @@
 }
 
 .drawer-nav-item.active {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--color-accent-light);
-    border-color: var(--color-accent-primary);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
 }
 
 .drawer-footer {

@@ -1,0 +1,111 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-container {
+    background: var(--color-bg-card);
+    width: 100%;
+    max-width: 500px;
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid var(--color-border);
+}
+
+@media (min-width: 640px) {
+    .modal-overlay {
+        align-items: center;
+    }
+
+    .modal-container {
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--color-border);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.close-btn {
+    padding: var(--spacing-xs);
+    color: var(--color-text-secondary);
+}
+
+.close-btn:hover {
+    color: var(--color-text-primary);
+}
+
+.task-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: 6px;
+}
+
+.modal-input,
+.modal-textarea {
+    width: 100%;
+    background: var(--color-bg-tertiary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    color: var(--color-text-primary);
+    font-size: 1rem;
+}
+
+.modal-input:focus,
+.modal-textarea:focus {
+    border-color: var(--color-accent-primary);
+    background: var(--color-bg-secondary);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    color: var(--color-accent-light);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    margin-top: var(--spacing-sm);
+}

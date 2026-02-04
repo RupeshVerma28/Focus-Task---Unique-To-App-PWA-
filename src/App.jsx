@@ -7,6 +7,7 @@ import TaskCard from './components/TaskCard';
 import StatsPanel from './components/StatsPanel';
 import HistoryView from './components/HistoryView';
 import FullScreenTimer from './components/FullScreenTimer';
+import AddTaskModal from './components/AddTaskModal';
 import {
   initDB,
   getAllTasks,
@@ -22,6 +23,7 @@ import {
   archiveTodayAndReset,
   getTodayDate,
   getTask,
+  clearHistory,
 } from './db/db';
 import { isNewDay, getMillisecondsUntilMidnight } from './utils/timeUtils';
 import './App.css';
@@ -30,7 +32,8 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [currentView, setCurrentView] = useState('tasks');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+
   const [stats, setStats] = useState(null);
   const [history, setHistory] = useState([]);
   const [lastCheckDate, setLastCheckDate] = useState(getTodayDate());
@@ -47,6 +50,11 @@ function App() {
       await loadTasks();
       await loadStats();
       await loadHistory();
+
+      // Request notification permission
+      if ('Notification' in window) {
+        Notification.requestPermission();
+      }
     };
     init();
   }, []);
@@ -54,7 +62,14 @@ function App() {
   // Load tasks from database
   const loadTasks = async () => {
     const allTasks = await getAllTasks();
-    setTasks(allTasks);
+    // Sort: Pinned first, then by creation date (newest first)
+    const sortedTasks = allTasks.sort((a, b) => {
+      if (a.pinned === b.pinned) {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      }
+      return a.pinned ? -1 : 1;
+    });
+    setTasks(sortedTasks);
 
     // Update active timer task if it's open
     if (activeTimerTaskId) {
@@ -116,13 +131,38 @@ function App() {
     }
   }, [tasks, activeTimerTaskId]);
 
+  // Schedule notifications for tasks with due dates
+  useEffect(() => {
+    tasks.forEach(task => {
+      if (task.dueDate && !task.completed) {
+        const dueTime = new Date(task.dueDate).getTime();
+        const now = Date.now();
+        const timeUntilDue = dueTime - now;
+
+        // If due in future (within 24 hours to avoid massive timeouts)
+        if (timeUntilDue > 0 && timeUntilDue < 86400000) {
+          const timerId = setTimeout(() => {
+            if (Notification.permission === 'granted') {
+              new Notification(`Task Due: ${task.title}`, {
+                body: task.description || 'It is time to work on this task!',
+                icon: '/icon.png' // Ensure this exists or remove
+              });
+            } else {
+              // Fallback to alert if no notification permission
+              alert(`Task Due: ${task.title}`);
+            }
+          }, timeUntilDue);
+          return () => clearTimeout(timerId);
+        }
+      }
+    });
+  }, [tasks]);
+
+
   // Add new task
-  const handleAddTask = async () => {
-    if (newTaskTitle.trim()) {
-      await addTask({ title: newTaskTitle.trim() });
-      setNewTaskTitle('');
-      await loadTasks();
-    }
+  const handleAddTask = async (taskData) => {
+    await addTask(taskData);
+    await loadTasks();
   };
 
   // Add task from full-screen timer
@@ -133,10 +173,12 @@ function App() {
     }
   };
 
-  // Handle Enter key in input
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleAddTask();
+  // Toggle Pin
+  const handlePinTask = async (id) => {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+      await updateTask(id, { pinned: !task.pinned });
+      await loadTasks();
     }
   };
 
@@ -158,6 +200,8 @@ function App() {
     await toggleTaskComplete(id);
     await loadTasks();
     await loadStats();
+    // Use timeout to allow UI update before loadHistory captures changed stats if needed, 
+    // though loadStats() handles today's stats.
   };
 
   // Open full-screen timer
@@ -222,46 +266,42 @@ function App() {
     }
   };
 
+  const handleClearHistory = async () => {
+    if (window.confirm('Are you sure you want to clear all history? This cannot be undone.')) {
+      await clearHistory();
+      await loadHistory();
+      await loadStats(); // Reset today's stats view if necessary, though clearHistory mostly affects 'dailyStats' store
+    }
+  };
+
   // Render current view
   const renderView = () => {
     switch (currentView) {
       case 'stats':
         return <StatsPanel stats={stats} />;
       case 'history':
-        return <HistoryView history={history} />;
+        // Combine today's stats with historical stats for a complete view
+        // Note: stats is "Today's" stats object. history is array of past stats.
+        // Check if today is already in history to avoid duplication (it shouldn't be if archiveTodayAndReset works correctly)
+        const todayDate = getTodayDate();
+        const historyHasToday = history.some(h => h.date === todayDate);
+
+        let fullHistory = [...history];
+        if (stats && !historyHasToday && (stats.completedTasks > 0 || stats.totalFocusTime > 0)) {
+          fullHistory = [stats, ...history];
+        }
+
+        return <HistoryView history={fullHistory} onClearHistory={handleClearHistory} />;
       default:
+        // Tasks View
+        const activeTasks = tasks.filter(t => !t.completed);
+
         return (
           <div className="tasks-view">
-            {/* Add Task Input */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="add-task-section"
-            >
-              <input
-                type="text"
-                value={newTaskTitle}
-                onChange={(e) => setNewTaskTitle(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="What needs to be done?"
-                className="add-task-input"
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleAddTask}
-                className="btn btn-primary add-task-btn"
-                disabled={!newTaskTitle.trim()}
-              >
-                <Plus size={20} />
-                Add Task
-              </motion.button>
-            </motion.div>
-
             {/* Task List */}
             <div className="tasks-list">
               <AnimatePresence mode="popLayout">
-                {tasks.length === 0 ? (
+                {activeTasks.length === 0 ? (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -269,10 +309,10 @@ function App() {
                     className="empty-state"
                   >
                     <h3>No tasks yet</h3>
-                    <p className="text-muted">Add your first task to get started!</p>
+                    <p className="text-muted">Tap + to add a task</p>
                   </motion.div>
                 ) : (
-                  tasks.map((task) => (
+                  activeTasks.map((task) => (
                     <TaskCard
                       key={task.id}
                       task={task}
@@ -280,11 +320,25 @@ function App() {
                       onDelete={handleDeleteTask}
                       onToggleComplete={handleToggleComplete}
                       onOpenTimer={handleOpenTimer}
+                      onPin={handlePinTask}
                     />
                   ))
                 )}
               </AnimatePresence>
             </div>
+
+            {/* FAB */}
+            <motion.div
+              className="fab-container"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <button className="fab-btn" onClick={() => setIsAddTaskModalOpen(true)}>
+                <Plus size={28} />
+              </button>
+            </motion.div>
           </div>
         );
     }
@@ -320,7 +374,13 @@ function App() {
         </div>
       </main>
 
-      {/* Full-Screen Timer */}
+      {/* Modals & Overlays */}
+      <AddTaskModal
+        isOpen={isAddTaskModalOpen}
+        onClose={() => setIsAddTaskModalOpen(false)}
+        onSave={handleAddTask}
+      />
+
       <AnimatePresence>
         {showFullScreenTimer && activeTimerTask && (
           <FullScreenTimer

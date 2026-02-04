@@ -42,6 +42,8 @@ export const addTask = async (task) => {
     const newTask = {
         title: task.title,
         description: task.description || '',
+        dueDate: task.dueDate || null,
+        pinned: task.pinned || false,
         completed: false,
         totalTime: 0, // in seconds
         currentSessionStart: null,
@@ -235,3 +237,10 @@ export const archiveTodayAndReset = async () => {
         }
     }
 };
+
+// Clear all history
+export const clearHistory = async () => {
+    const db = await getDB();
+    await db.clear('dailyStats');
+};
+

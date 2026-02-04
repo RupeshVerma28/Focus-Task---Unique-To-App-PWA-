@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import { Calendar, Clock, CheckCircle, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, ArrowRight, Trash2 } from 'lucide-react';
 import { formatTime, formatDate } from '../utils/timeUtils';
 import './HistoryView.css';
 
-const HistoryView = ({ history }) => {
+const HistoryView = ({ history, onClearHistory }) => {
     if (!history || history.length === 0) {
         return (
             <div className="history-view">
@@ -13,8 +13,8 @@ const HistoryView = ({ history }) => {
                     className="history-empty"
                 >
                     <Calendar size={48} className="empty-icon" />
-                    <h3>No History Yet</h3>
-                    <p className="text-muted">Complete tasks to start building your productivity history!</p>
+                    <h3>No Turn Back</h3>
+                    <p className="text-muted">History is empty.</p>
                 </motion.div>
             </div>
         );
@@ -27,8 +27,13 @@ const HistoryView = ({ history }) => {
                 animate={{ opacity: 1, y: 0 }}
                 className="history-header"
             >
-                <h2>History</h2>
-                <p className="text-muted">Your past productivity records</p>
+                <div>
+                    <h2>History</h2>
+                    <p className="text-muted">Your past productivity.</p>
+                </div>
+                <button onClick={onClearHistory} className="btn btn-danger btn-sm">
+                    <Trash2 size={16} /> Clear History
+                </button>
             </motion.div>
 
             <div className="history-list">

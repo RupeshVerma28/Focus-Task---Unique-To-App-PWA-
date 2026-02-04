@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
       manifest: {
-        name: 'Focus Tasks - To-Do PWA',
-        short_name: 'Focus Tasks',
+        name: 'Planixa - Focus & Tasks',
+        short_name: 'Planixa',
         description: 'A productivity-focused to-do list app with built-in focus timers',
         theme_color: '#6366f1',
         background_color: '#0a0e17',
